@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Kola</string>
+    <string name="slogan_text">Better manage your money transaction\n and enhance your growth.</string>
+    <string name="logo_content_desc">application logo</string>
+    <string name="login">Login</string>
+    <string name="login_hint">Phone Number</string>
+    <string name="terms_and_conditions">Terms and conditions</string>
+    <string name="signature_text">Powered by kola</string>
+    <string name="log_in">Log in</string>
+</resources>

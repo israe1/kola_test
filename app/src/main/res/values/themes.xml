@@ -1,0 +1,44 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Kola" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorPrimaryLight</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="lightPageBackground">
+        <item name="android:background">@color/grey_5</item>
+    </style>
+
+    <style name="darkPageBackground">
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="darkText">
+        <item name="android:textColor">@color/grey_80</item>
+    </style>
+
+    <style name="lightText">
+        <item name="android:textColor">@color/grey_5</item>
+    </style>
+
+    <style name="whiteMainText">
+        <item name="android:textColor">@color/grey_5</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="mainText">
+        <item name="android:textColor">@color/colorPrimaryLight</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+</resources>
