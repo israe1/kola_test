@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".GoalDetailActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_baseline_keyboard_arrow_left_24"
+            app:titleTextColor="@color/grey_80">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/medium_space">
+
+                <TextView
+                    android:id="@+id/goalName"
+                    style="@style/ActionBarTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLines="1"
+                    tools:text="My Family" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonAdd"
+                    style="@style/buttonTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/gradient_background_radius_4"
+                    android:drawableStart="@drawable/ic_baseline_add_24"
+                    android:paddingHorizontal="@dimen/medium_space"
+                    android:text="@string/add_members" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/large_space" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/large_space"
+                    android:background="@drawable/purple_stroke_box_radius_20"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/large_space">
+
+                    <TextView
+                        style="@style/dialogTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/goal" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/goalAmount"
+                        style="@style/moneyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="1.548.000" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/goalDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/goalDueDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        tools:text="Due date: April 16, 2021" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/buttonContribute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="@drawable/gradient_background_radius_4"
+                        style="@style/buttonTextStyle"
+                        android:text="@string/contribute"
+                        android:paddingHorizontal="@dimen/large_space"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/large_space"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="end"
+                    android:paddingHorizontal="@dimen/large_space"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:background="@drawable/side_tag_background"
+                    tools:ignore="SmallSp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/contributed"/>
+                    <View
+                        android:layout_width="30dp"
+                        android:layout_height="0dp"/>
+                    <TextView
+                        android:id="@+id/goalContributedAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="548.000"/>
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="0dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/currency"
+                        android:textSize="10sp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/medium_space"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginHorizontal="@dimen/large_space"
+                    android:background="@color/overlay_dark_10"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/contributionList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_contribution"
+                    tools:itemCount="2"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/large_space"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="end"
+                    android:paddingHorizontal="@dimen/large_space"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:background="@drawable/side_tag_background"
+                    android:backgroundTint="@color/colorPrimary"
+                    tools:ignore="SmallSp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/contributed"/>
+                    <View
+                        android:layout_width="30dp"
+                        android:layout_height="0dp"/>
+                    <TextView
+                        android:id="@+id/goalRemainingAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="1.000.000"/>
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="0dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/currency"
+                        android:textSize="10sp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/large_space"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginHorizontal="@dimen/large_space"
+                    android:background="@color/overlay_dark_10"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/remainingList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/item_contribution"
+                    tools:itemCount="2"/>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
