@@ -1,7 +1,8 @@
-package com.israel.kola
+package com.israel.kola.ui.create_goal
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.israel.kola.R
 
 class CreateGoalActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

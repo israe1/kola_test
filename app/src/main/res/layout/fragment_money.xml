@@ -1,199 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="true">
-    <LinearLayout
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-        <View
-            android:layout_width="0dp"
-            android:layout_height="@dimen/large_space"/>
+        android:fillViewport="true">
+
         <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:background="@drawable/circle_shape"
-            android:gravity="center"
-            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/balance"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:alpha="0.5"/>
+
             <View
                 android:layout_width="0dp"
-                android:layout_height="@dimen/medium_space"/>
+                android:layout_height="@dimen/large_space" />
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@drawable/circle_shape"
+                android:gravity="center"
+                android:padding="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/balance"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:alpha="0.5" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/medium_space" />
+
+                <TextView
+                    android:id="@+id/balanceAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="150.000"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="@string/currency" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/large_space" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:background="@drawable/gradient_background_radius_16"
+                android:layout_marginHorizontal="@dimen/large_space">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/deposit" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/depositText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/tranfer" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/transferText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/credit" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/creditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/internet" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/internetText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/large_space" />
+
             <TextView
-                android:id="@+id/balanceAmount"
+                android:id="@+id/viewAllTransactions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="150.000"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/white"/>
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/view_all"
+                android:layout_marginHorizontal="@dimen/large_space"
+                app:drawableTint="@color/colorPrimary"
+                app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_24"
+                android:drawablePadding="@dimen/medium_space"
+                android:textColor="@color/colorPrimary" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/large_space" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/transactionsList"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:text="@string/currency"/>
+                tools:listitem="@layout/item_transaction"
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="@dimen/large_space"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal"
-            android:background="@drawable/gradient_background_radius_16"
-            android:layout_marginHorizontal="@dimen/large_space">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:alpha="0.6"
-                    android:textSize="12sp"
-                    android:text="@string/deposit"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/medium_space"/>
-                <TextView
-                    android:id="@+id/depositText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    tools:text="26.000"/>
-            </LinearLayout>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:alpha="0.6"
-                    android:textSize="12sp"
-                    android:text="@string/tranfer"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/medium_space"/>
-                <TextView
-                    android:id="@+id/transferText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    tools:text="26.000"/>
-            </LinearLayout>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:alpha="0.6"
-                    android:textSize="12sp"
-                    android:text="@string/credit"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/medium_space"/>
-                <TextView
-                    android:id="@+id/creditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    tools:text="26.000"/>
-            </LinearLayout>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:alpha="0.6"
-                    android:textSize="12sp"
-                    android:text="@string/internet"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/medium_space"/>
-                <TextView
-                    android:id="@+id/internetText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    tools:text="26.000"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="@dimen/large_space"/>
-
-        <TextView
-            android:id="@+id/viewAllTransactions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/view_all"
-            android:layout_marginHorizontal="@dimen/large_space"
-            app:drawableTint="@color/colorPrimary"
-            app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_24"
-            android:drawablePadding="@dimen/medium_space"
-            android:textColor="@color/colorPrimary"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="@dimen/large_space"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/transactionsList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/item_transaction"
-            android:nestedScrollingEnabled="false"/>
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</layout>
