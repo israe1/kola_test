@@ -36,7 +36,7 @@ class GoalDetailActivity : AppCompatActivity() {
         }
 
         binding.buttonContribute.setOnClickListener{
-           val dialog = AddContributionDialog.newInstance().show(supportFragmentManager, "tag")
+            AddContributionDialog.newInstance().show(supportFragmentManager, "tag")
         }
 
         observeViewModel()

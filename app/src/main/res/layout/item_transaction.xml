@@ -30,14 +30,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@drawable/in_transaction_background"
-                android:backgroundTint="@{transaction.state == TransactionState.IN ? @color/colorPrimaryDark : @color/colorPrimary}">
+                android:backgroundTint="@{transaction.state == TransactionState.DEPOSIT ? @color/colorPrimaryDark : @color/colorPrimary}">
 
                 <ImageView
                     android:id="@+id/transactionImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@{transaction.state == TransactionState.IN ? @drawable/ic_arrow_down_left : @drawable/ic_arrow_up_right}"
+                    android:src="@{transaction.state == TransactionState.DEPOSIT ? @drawable/ic_arrow_down_left : @drawable/ic_arrow_up_right}"
                     tools:src="@drawable/ic_arrow_down_left"
                     android:padding="12dp"
                     android:contentDescription="@string/deposit_transaction" />
@@ -50,7 +50,7 @@
                 app:layout_constraintTop_toTopOf="@id/transactionImageFrame"
                 app:layout_constraintStart_toEndOf="@id/transactionImageFrame"
                 android:layout_marginStart="16dp"
-                android:text="@{transaction.state == TransactionState.IN ? `Deposit` : `Transfer`}"
+                android:text="@{transaction.state == TransactionState.DEPOSIT ? `Deposit` : `Transfer`}"
                 tools:text="Deposit"
                 style="@style/titleText" />
 
@@ -81,7 +81,7 @@
                 app:layout_constraintTop_toTopOf="@id/transactionName"
                 app:layout_constraintBottom_toBottomOf="@id/transactionName"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="@{transaction.state == TransactionState.IN ? `In` : `Out`}"
+                android:text="@{transaction.state == TransactionState.DEPOSIT ? `In` : `Out`}"
                 tools:text="In" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

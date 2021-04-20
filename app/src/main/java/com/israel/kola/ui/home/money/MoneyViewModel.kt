@@ -12,16 +12,16 @@ class MoneyViewModel: ViewModel() {
     fun fetchTransactions(){
         loading.value = true
         val mockData = listOf(
-            Transaction(1, TransactionState.IN, 20000),
-            Transaction(2, TransactionState.IN, 1500),
-            Transaction(3, TransactionState.OUT, 10000),
-            Transaction(4, TransactionState.OUT, 2500),
-            Transaction(5, TransactionState.IN, 30000),
-            Transaction(6, TransactionState.IN, 4000),
-            Transaction(7, TransactionState.OUT, 25000),
-            Transaction(8, TransactionState.IN, 5000),
-            Transaction(9, TransactionState.OUT, 10000),
-            Transaction(10, TransactionState.IN, 13000),
+            Transaction("1", TransactionState.DEPOSIT, 20000),
+            Transaction("2", TransactionState.DEPOSIT, 1500),
+            Transaction("3", TransactionState.TRANSFER, 10000),
+            Transaction("4", TransactionState.TRANSFER, 2500),
+            Transaction("5", TransactionState.DEPOSIT, 30000),
+            Transaction("6", TransactionState.DEPOSIT, 4000),
+            Transaction("7", TransactionState.TRANSFER, 25000),
+            Transaction("8", TransactionState.DEPOSIT, 5000),
+            Transaction("9", TransactionState.TRANSFER, 10000),
+            Transaction("10", TransactionState.DEPOSIT, 13000),
         )
         loading.value = false
         transactions.value = mockData

@@ -1,11 +1,11 @@
 package com.israel.kola.models
 
 class Transaction {
-    var id: Int
+    var id: String
     var state: TransactionState
     var amount: Int
 
-    constructor(id: Int, state: TransactionState, amount: Int) {
+    constructor(id: String, state: TransactionState, amount: Int) {
         this.id = id
         this.state = state
         this.amount = amount

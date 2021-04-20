@@ -1,5 +1,5 @@
 package com.israel.kola.models
 
 enum class TransactionState {
-    IN, OUT
+    DEPOSIT, WITHDRAW, TRANSFER, INTERNET, CREDIT
 }
