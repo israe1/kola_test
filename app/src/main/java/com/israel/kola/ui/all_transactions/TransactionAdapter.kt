@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.israel.kola.databinding.ItemTransactionBinding
-import com.israel.kola.models.Transaction
+import com.israel.kola.data.local.Transaction
 
 class TransactionAdapter(var transactions: ArrayList<Transaction>): RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 

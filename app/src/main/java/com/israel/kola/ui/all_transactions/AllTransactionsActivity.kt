@@ -1,24 +1,25 @@
 package com.israel.kola.ui.all_transactions
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.israel.kola.R
-import kotlinx.android.synthetic.main.activity_all_transactions.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AllTransactionsActivity : AppCompatActivity() {
-    lateinit var viewModel: TransactionsViewModel
+    private val viewModel: TransactionsViewModel by viewModels()
     private var transactionAdapter: TransactionAdapter = TransactionAdapter(arrayListOf())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_transactions)
 
-        viewModel = ViewModelProviders.of(this).get(TransactionsViewModel::class.java)
-        viewModel.fetchTransactions(this)
 
-        transactionsList.apply {
+        findViewById<RecyclerView>(R.id.transactionsList).apply {
             layoutManager = LinearLayoutManager(this.context)
             adapter = transactionAdapter
         }

@@ -1,25 +1,53 @@
-package com.israel.kola.ui.all_transactions
+package com.israel.kola.di
 
+import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.israel.kola.data.local.LocalDatabase
 import com.israel.kola.data.local.Transaction
-import com.israel.kola.data.local.TransactionDataSource
+import com.israel.kola.data.local.TransactionDao
 import com.israel.kola.models.TransactionState
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.israel.kola.utils.doAsync
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.util.regex.Pattern
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@HiltViewModel
-class TransactionsViewModel @Inject constructor(private var transactionDataSource: TransactionDataSource): ViewModel() {
-    val transactions = MutableLiveData<List<Transaction>>()
-    val loading = MutableLiveData<Boolean>()
+@InstallIn(SingletonComponent::class)
+@Module
+object DatabaseModule{
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext appContext: Context): LocalDatabase{
+        return Room.databaseBuilder(
+            appContext,
+            LocalDatabase::class.java,
+            "kola.db"
+        ).addCallback(object : RoomDatabase.Callback(){
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
 
 
-    public fun fetchTransactions(activity: FragmentActivity){
+            }
+        }).build()
+    }
+
+    @Provides
+    fun provideTransactionDao(database: LocalDatabase): TransactionDao{
+        return database.transactionDao()
+    }
+
+    private fun fetchTransactions(activity: FragmentActivity): List<Transaction>{
         val messageUri = Uri.parse("content://sms/")
         val cr = activity.contentResolver
         val cursor = cr.query(messageUri, null, null, null, null)
@@ -28,7 +56,7 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
         val allTransactions = arrayListOf<Transaction>()
         val smsCount = cursor?.count
         Log.e("COUNT", smsCount.toString())
-        if (cursor == null)return
+        if (cursor == null)return arrayListOf()
         var i = 0
         var j = 0
 
@@ -78,13 +106,10 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
                 e.printStackTrace()
             }
         }
-
-        for (t in allTransactions){
-            addTransaction(t)
-        }
+        return allTransactions
     }
 
-    public fun msgToTransaction(regex: String, body: String, transactionId: String, state: TransactionState): Transaction?{
+    private fun msgToTransaction(regex: String, body: String, transactionId: String, state: TransactionState): Transaction?{
         val p = Pattern.compile(regex)
         val m = p.matcher(body)
         if (m.find()){
@@ -100,9 +125,4 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
         }
         return null
     }
-
-    public fun addTransaction(transaction: Transaction){
-        transactionDataSource.addTransaction(transaction)
-    }
-
 }

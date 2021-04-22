@@ -16,14 +16,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.israel.kola.R
-import com.israel.kola.models.Transaction
+import com.israel.kola.data.local.Transaction
 import com.israel.kola.models.TransactionState
 import com.israel.kola.ui.home.goal.GoalFragment
 import com.israel.kola.ui.home.money.MoneyFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.regex.Pattern
 
 private const val SMS_REQUEST_CODE = 111
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,87 +89,5 @@ class HomeActivity : AppCompatActivity() {
         }
 
         registerReceiver(br, IntentFilter("android.provider.Telephony.SMS_RECEIVED"))
-        //getAllMessages()
-    }
-
-    private fun getAllMessages(){
-        val messageUri = Uri.parse("content://sms/")
-        val cr = contentResolver
-        val c = cr.query(messageUri, null, null, null, null)
-        startManagingCursor(c)
-        val allTransactions = arrayListOf<Transaction>()
-        val totalSMS = c?.count
-        if (c == null)return
-        var i = 0
-        var j = 0
-        if (c.moveToFirst()){
-            try {
-                while (i < totalSMS!!){
-                    val sender = c.getString(c.getColumnIndex("address"))
-                    val body = c.getString(c.getColumnIndex("body")).replace(" ", "")
-                    if (sender.equals("OrangeMoney") && (body.contains("IDtransaction") || body.contains("Nodetransaction"))){
-                        val pCredit = Pattern.compile("RC\\d+.\\d+.\\w+")
-                        val pTransfer = Pattern .compile("PP\\d+.\\d+.\\w+")
-                        val pWithdraw = Pattern .compile("CO\\d+.\\d+.\\w+")
-                        val pDeposit = Pattern .compile("CI\\d+.\\d+.\\w+")
-                        val mCredit = pCredit.matcher(body)
-                        val mTransfer = pTransfer.matcher(body)
-                        val mWithdraw = pWithdraw.matcher(body)
-                        val mDeposit = pDeposit.matcher(body)
-                        when {
-                            mCredit.find() -> {
-                                val p = Pattern.compile("Montantdelatransaction:\\d+FCFA")
-                                val m = p.matcher(body)
-                                if (m.find()){
-                                    val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
-                                    val amount = amountFCFA.toInt()
-                                    allTransactions.add(Transaction(mCredit.group(), TransactionState.CREDIT, amount))
-                                }
-                            }
-                            mTransfer.find() -> {
-                                Log.e("Body", body)
-                                val p = Pattern.compile("MontantTransaction :\\d+FCFA")
-                                val m = p.matcher(body)
-                                if (m.find()){
-                                    val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
-                                    val amount = amountFCFA.toInt()
-                                    allTransactions.add(Transaction(mTransfer.group(), TransactionState.TRANSFER, amount))
-                                }
-                            }
-                            mWithdraw.find() -> {
-                                val p = Pattern.compile("Montant:\\d+FCFA")
-                                val m = p.matcher(body)
-                                if (m.find()){
-                                    val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
-                                    val amount = amountFCFA.toInt()
-                                    allTransactions.add(Transaction(mWithdraw.group(), TransactionState.WITHDRAW, amount))
-                                }
-
-
-                            }
-                            mDeposit.find() -> {
-                                val p = Pattern.compile("Montantdetransaction:\\d+FCFA")
-                                val m = p.matcher(body)
-                                if (m.find()){
-                                    val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
-                                    val amount = amountFCFA.toInt()
-                                    allTransactions.add(Transaction(mDeposit.group(), TransactionState.DEPOSIT, amount))
-                                }
-
-                                j++
-                            }
-                        }
-
-
-
-                    }
-                    i++
-                    c.moveToNext()
-                }
-            }catch (e: Exception){
-                e.printStackTrace()
-            }
-        }
-        Log.e("NUMBER", j.toString())
     }
 }
