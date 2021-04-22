@@ -87,7 +87,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         registerReceiver(br, IntentFilter("android.provider.Telephony.SMS_RECEIVED"))
-        getAllMessages()
+        //getAllMessages()
     }
 
     private fun getAllMessages(){
@@ -95,11 +95,7 @@ class HomeActivity : AppCompatActivity() {
         val cr = contentResolver
         val c = cr.query(messageUri, null, null, null, null)
         startManagingCursor(c)
-        val creditTransactions = arrayListOf<Transaction>()
-        val transferTransactions = arrayListOf<Transaction>()
-        val withdrawTransactions = arrayListOf<Transaction>()
-        val depositTransactions = arrayListOf<Transaction>()
-        val internetTransactions = arrayListOf<Transaction>()
+        val allTransactions = arrayListOf<Transaction>()
         val totalSMS = c?.count
         if (c == null)return
         var i = 0
@@ -125,7 +121,7 @@ class HomeActivity : AppCompatActivity() {
                                 if (m.find()){
                                     val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
                                     val amount = amountFCFA.toInt()
-                                    creditTransactions.add(Transaction(mCredit.group(), TransactionState.CREDIT, amount))
+                                    allTransactions.add(Transaction(mCredit.group(), TransactionState.CREDIT, amount))
                                 }
                             }
                             mTransfer.find() -> {
@@ -135,7 +131,7 @@ class HomeActivity : AppCompatActivity() {
                                 if (m.find()){
                                     val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
                                     val amount = amountFCFA.toInt()
-                                    transferTransactions.add(Transaction(mTransfer.group(), TransactionState.TRANSFER, amount))
+                                    allTransactions.add(Transaction(mTransfer.group(), TransactionState.TRANSFER, amount))
                                 }
                             }
                             mWithdraw.find() -> {
@@ -144,7 +140,7 @@ class HomeActivity : AppCompatActivity() {
                                 if (m.find()){
                                     val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
                                     val amount = amountFCFA.toInt()
-                                    withdrawTransactions.add(Transaction(mWithdraw.group(), TransactionState.WITHDRAW, amount))
+                                    allTransactions.add(Transaction(mWithdraw.group(), TransactionState.WITHDRAW, amount))
                                 }
 
 
@@ -155,7 +151,7 @@ class HomeActivity : AppCompatActivity() {
                                 if (m.find()){
                                     val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
                                     val amount = amountFCFA.toInt()
-                                    depositTransactions.add(Transaction(mDeposit.group(), TransactionState.WITHDRAW, amount))
+                                    allTransactions.add(Transaction(mDeposit.group(), TransactionState.DEPOSIT, amount))
                                 }
 
                                 j++
@@ -173,9 +169,5 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         Log.e("NUMBER", j.toString())
-        Log.e("CREDIT", creditTransactions.size.toString())
-        Log.e("TRANSFER", transferTransactions.size.toString())
-        Log.e("WITHDRAW", withdrawTransactions.size.toString())
-        Log.e("DEPOSIT", depositTransactions.size.toString())
     }
 }

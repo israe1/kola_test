@@ -55,7 +55,8 @@ dependencies {
 
     implementation 'com.ismaeldivita.chipnavigation:chip-navigation-bar:1.3.4'
 
-    implementation "android.arch.lifecycleextensions:$lifeCycleExtensionsVersion"
+    implementation "android.arch.lifecycle:extensions:$lifeCycleExtensionsVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$lifeCycleExtensionsVersion"
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"

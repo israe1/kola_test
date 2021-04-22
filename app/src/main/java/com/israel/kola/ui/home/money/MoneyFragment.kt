@@ -7,15 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.israel.kola.R
 import com.israel.kola.databinding.FragmentMoneyBinding
 import com.israel.kola.ui.all_transactions.AllTransactionsActivity
 import com.israel.kola.ui.all_transactions.TransactionAdapter
+import com.israel.kola.ui.all_transactions.TransactionsViewModel
 
 class MoneyFragment: Fragment() {
-    lateinit var viewModel: MoneyViewModel
+    lateinit var viewModel: TransactionsViewModel
     lateinit var binding: FragmentMoneyBinding
     private var transactionAdapter: TransactionAdapter = TransactionAdapter(arrayListOf())
 
@@ -25,8 +27,8 @@ class MoneyFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        viewModel = ViewModelProviders.of(this).get(MoneyViewModel::class.java)
-        viewModel.fetchTransactions()
+        viewModel = ViewModelProviders.of(this).get(TransactionsViewModel::class.java)
+        viewModel.fetchTransactions(requireActivity())
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_money, container, false)
 
         binding.transactionsList.apply {
@@ -50,7 +52,7 @@ class MoneyFragment: Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.transactions.observe(this, {transactions ->
+        viewModel.transactions.observe(viewLifecycleOwner, Observer {transactions ->
             transactions?.let{
                 transactionAdapter.updateTransactions(it)
             }
