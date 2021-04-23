@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "810406609034",
+    "project_id": "kola-5baab",
+    "storage_bucket": "kola-5baab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810406609034:android:b19ae04a3477584a87ed73",
+        "android_client_info": {
+          "package_name": "com.israel.kola"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810406609034-leus0bf6q4942dqqe9gheov9e45ge4sv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.israel.kola",
+            "certificate_hash": "fdf1afd2450970f62b0fc5f50d4f94a38e5d8a31"
+          }
+        },
+        {
+          "client_id": "810406609034-i45sn6f20mrneug303s994amoms0eiji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlP_YsJDT901TAspzb7u-K36VGmrSZY78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810406609034-i45sn6f20mrneug303s994amoms0eiji.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

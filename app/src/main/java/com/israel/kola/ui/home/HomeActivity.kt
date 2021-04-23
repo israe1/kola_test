@@ -12,12 +12,15 @@ import android.provider.Telephony
 import android.telephony.SmsMessage
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.israel.kola.R
 import com.israel.kola.data.local.Transaction
 import com.israel.kola.models.TransactionState
+import com.israel.kola.ui.all_transactions.TransactionsViewModel
 import com.israel.kola.ui.home.goal.GoalFragment
 import com.israel.kola.ui.home.money.MoneyFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +30,7 @@ import java.util.regex.Pattern
 private const val SMS_REQUEST_CODE = 111
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
+    private val viewModel: TransactionsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -79,11 +83,11 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun receiveMessages() {
-        var br = object: BroadcastReceiver(){
+        viewModel.fetchTransactions(this)
+        val br = object: BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 for (sms: SmsMessage in Telephony.Sms.Intents.getMessagesFromIntent(intent)){
-                    Log.e("Test", "get")
-                    Toast.makeText(applicationContext, sms.displayMessageBody, Toast.LENGTH_LONG).show()
+                    viewModel.fetchIncomingMessage(sms)
                 }
             }
         }

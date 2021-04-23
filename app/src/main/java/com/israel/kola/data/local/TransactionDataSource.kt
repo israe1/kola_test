@@ -2,6 +2,8 @@ package com.israel.kola.data.local
 
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -20,7 +22,7 @@ class TransactionDataSource @Inject constructor(private val transactionDao: Tran
         }
     }
 
-    fun getAllTransactions(callback: (List<Transaction>) -> Unit){
+    fun getAllTransactions(callback: (Flow<List<Transaction>>) -> Unit){
         executorService.execute {
             val transactions = transactionDao.getAll()
             mainThreadHandler.post{ callback(transactions) }

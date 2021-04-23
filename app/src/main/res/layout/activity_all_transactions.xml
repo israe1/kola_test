@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.all_transactions.AllTransactionsActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_baseline_keyboard_arrow_left_24"
-        app:title="@string/all_transactions"
-        app:titleTextColor="@color/grey_80" />
+    <data>
+        <variable
+            name="state"
+            type="com.israel.kola.models.TransactionState" />
+        <import type="com.israel.kola.models.TransactionState"/>
+    </data>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        android:layout_height="match_parent"
+        tools:context=".ui.all_transactions.AllTransactionsActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_baseline_keyboard_arrow_left_24"
+            app:title="@string/all_transactions"
+            app:titleTextColor="@color/grey_80" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:descendantFocusability="blocksDescendants"
-            android:orientation="vertical">
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
 
             <View
                 android:layout_width="0dp"
@@ -87,7 +93,7 @@
                         android:layout_height="0dp" />
 
                     <TextView
-                        android:id="@+id/goalContributedAmount"
+                        android:id="@+id/totalTransactionsAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
@@ -110,18 +116,168 @@
 
             <View
                 android:layout_width="0dp"
-                android:layout_height="@dimen/medium_space" />
+                android:layout_height="@dimen/large_space" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:background="@drawable/gradient_background_radius_16"
+                android:layout_marginHorizontal="@dimen/large_space">
+
+                <LinearLayout
+                    android:id="@+id/layoutDeposit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:foreground="@{state == TransactionState.DEPOSIT ? @color/overlay_dark_20 : @android:color/transparent}"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/deposit" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/depositText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/layoutWithdraw"
+                    android:foreground="@{state == TransactionState.WITHDRAW ? @color/overlay_dark_20 : @android:color/transparent}"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/withdraw" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/withdrawText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/layoutTransfer"
+                    android:foreground="@{state == TransactionState.TRANSFER ? @color/overlay_dark_20 : @android:color/transparent}"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/tranfer" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/transferText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/layoutCredit"
+                    android:foreground="@{state == TransactionState.CREDIT ? @color/overlay_dark_20 : @android:color/transparent}"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:alpha="0.6"
+                        android:textSize="12sp"
+                        android:text="@string/credit" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/medium_space" />
+
+                    <TextView
+                        android:id="@+id/creditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        tools:text="26.000" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/large_space" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/transactionsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_transaction" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="@dimen/large_space" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -8,6 +8,7 @@ import com.israel.kola.models.TransactionState
 @Entity(tableName = "transaction")
 data class Transaction (
     @PrimaryKey val id: String,
-    @ColumnInfo val state: String?,
+    @ColumnInfo val state: String,
+    @ColumnInfo val date: String,
     @ColumnInfo val amount: Int
 )

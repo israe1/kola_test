@@ -1,15 +1,21 @@
 package com.israel.kola.ui.all_transactions
 
 import android.net.Uri
+import android.telephony.SmsMessage
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.israel.kola.data.local.Transaction
 import com.israel.kola.data.local.TransactionDataSource
 import com.israel.kola.models.TransactionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -17,10 +23,35 @@ import javax.inject.Inject
 class TransactionsViewModel @Inject constructor(private var transactionDataSource: TransactionDataSource): ViewModel() {
     val transactions = MutableLiveData<List<Transaction>>()
     val loading = MutableLiveData<Boolean>()
+    val total = MutableLiveData<Int>()
+    val balance = MutableLiveData<Int>()
+    val credit = MutableLiveData<Int>()
+    val deposit = MutableLiveData<Int>()
+    val transfer = MutableLiveData<Int>()
+    val internet = MutableLiveData<Int>()
+    val withdraw = MutableLiveData<Int>()
 
 
-    public fun fetchTransactions(activity: FragmentActivity){
-        val messageUri = Uri.parse("content://sms/")
+
+    init {
+        transactionDataSource.getAllTransactions {
+            viewModelScope.launch {
+                it.collect {
+                    transactions.value = it.sortedWith(compareByDescending{ t -> t.date})
+                    getTotal()
+                    getBalance()
+                    getStateTotal(TransactionState.DEPOSIT, deposit)
+                    getStateTotal(TransactionState.WITHDRAW, withdraw)
+                    getStateTotal(TransactionState.CREDIT, credit)
+                    getStateTotal(TransactionState.TRANSFER, transfer)
+                    getStateTotal(TransactionState.INTERNET, internet)
+                }
+            }
+        }
+    }
+
+    fun fetchTransactions(activity: FragmentActivity){
+        val messageUri = Uri.parse("content://sms/inbox")
         val cr = activity.contentResolver
         val cursor = cr.query(messageUri, null, null, null, null)
         activity.startManagingCursor(cursor)
@@ -36,8 +67,10 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
             try{
                 while (i < smsCount!!){
                     val sender = cursor.getString(cursor.getColumnIndex("address"))
-                    val body = cursor.getString(cursor.getColumnIndex("body")).replace(" ", "")
-                    if(sender.equals("OrangeMoney") && (body.contains("IDtransaction") || body.contains("Nodetransaction"))){
+                    var body = cursor.getString(cursor.getColumnIndex("body")).replace(" ", "")
+                    val date = cursor.getString(cursor.getColumnIndex("date"))
+
+                    if(sender.equals("OrangeMoney") && (body.contains("IDtransaction") || body.contains("Nodetransaction") || body.contains("Referencedetransaction"))){
                         j++
                         val matcherCredit = Pattern.compile("RC\\d+.\\d+.\\w+").matcher(body)
                         val matcherTransfer = Pattern.compile("PP\\d+.\\d+.\\w+").matcher(body)
@@ -46,25 +79,32 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
 
                         when{
                             matcherCredit.find() -> {
-                                val transaction = msgToTransaction("Montantdelatransaction:\\d+FCFA", body, matcherCredit.group(), TransactionState.CREDIT)
+                                val transaction = msgToTransaction("Montantdelatransaction:\\d+FCFA", body, matcherCredit.group(), TransactionState.CREDIT, date)
                                 transaction?.let {
                                     allTransactions.add(it)
                                 }
                             }
                             matcherTransfer.find() -> {
-                                val transaction = msgToTransaction("MontantTransaction:\\d+FCFA", body, matcherTransfer.group(), TransactionState.TRANSFER)
+                                val transaction = msgToTransaction("MontantTransaction:\\d+FCFA", body, matcherTransfer.group(), TransactionState.TRANSFER, date)
                                 transaction?.let {
                                     allTransactions.add(it)
                                 }
                             }
                             matcherWithdraw.find() -> {
-                                val transaction = msgToTransaction("Montant:\\d+FCFA", body, matcherWithdraw.group(), TransactionState.WITHDRAW)
+                                val transaction = msgToTransaction("Montant:\\d+FCFA", body, matcherWithdraw.group(), TransactionState.WITHDRAW, date)
                                 transaction?.let {
                                     allTransactions.add(it)
                                 }
                             }
                             matcherDeposit.find() -> {
-                                val transaction = msgToTransaction("Montantdetransaction:\\d+FCFA", body, matcherDeposit.group(), TransactionState.DEPOSIT)
+                                var regex = ""
+                                if (body.contains("Montantdetransaction")){
+                                    regex = "Montantdetransaction:\\d+FCFA"
+                                }else if (body.contains("Vousavezrecuavecsucces")){
+                                    body = body.replace("Vousavezrecuavecsucces", "Vousavezrecuavecsucces:")
+                                    regex = "Vousavezrecuavecsucces:\\d+FCFA"
+                                }
+                                val transaction = msgToTransaction(regex, body, matcherDeposit.group(), TransactionState.DEPOSIT, date)
                                 transaction?.let {
                                     allTransactions.add(it)
                                 }
@@ -78,21 +118,27 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
                 e.printStackTrace()
             }
         }
-
         for (t in allTransactions){
             addTransaction(t)
         }
     }
 
-    public fun msgToTransaction(regex: String, body: String, transactionId: String, state: TransactionState): Transaction?{
+    private fun msgToTransaction(regex: String, body: String, transactionId: String, state: TransactionState, date: String): Transaction?{
+        if (body.contains("Vousavezrecuavecsucces")){
+            Log.e("Body", body)
+        }
         val p = Pattern.compile(regex)
         val m = p.matcher(body)
         if (m.find()){
             val amountFCFA = m.group().split(":")[1].replace("FCFA", "")
             val amount = amountFCFA.toInt()
+            if (body.contains("Vousavezrecuavecsucces")){
+                Log.e("AMOUNT", amount.toString())
+            }
             return Transaction(
                 transactionId,
                 state.toString(),
+                date,
                 amount
             )
         }else{
@@ -101,8 +147,100 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
         return null
     }
 
-    public fun addTransaction(transaction: Transaction){
+    private fun addTransaction(transaction: Transaction){
         transactionDataSource.addTransaction(transaction)
     }
 
+    fun fetchIncomingMessage(sms: SmsMessage){
+        val sender = sms.originatingAddress
+        var body = sms.messageBody
+        val date = sms.timestampMillis.toString()
+        if(sender.equals("OrangeMoney") && (body.contains("IDtransaction") || body.contains("Nodetransaction") || body.contains("Referencedetransaction"))){
+            val matcherCredit = Pattern.compile("RC\\d+.\\d+.\\w+").matcher(body)
+            val matcherTransfer = Pattern.compile("PP\\d+.\\d+.\\w+").matcher(body)
+            val matcherWithdraw = Pattern.compile("CO\\d+.\\d+.\\w+").matcher(body)
+            val matcherDeposit = Pattern.compile("CI\\d+.\\d+.\\w+").matcher(body)
+
+            when{
+                matcherCredit.find() -> {
+                    val transaction = msgToTransaction("Montantdelatransaction:\\d+FCFA", body, matcherCredit.group(), TransactionState.CREDIT, date)
+                    transaction?.let {
+                        addTransaction(it)
+                    }
+                }
+                matcherTransfer.find() -> {
+                    val transaction = msgToTransaction("MontantTransaction:\\d+FCFA", body, matcherTransfer.group(), TransactionState.TRANSFER, date)
+                    transaction?.let {
+                        addTransaction(it)
+                    }
+                }
+                matcherWithdraw.find() -> {
+                    val transaction = msgToTransaction("Montant:\\d+FCFA", body, matcherWithdraw.group(), TransactionState.WITHDRAW, date)
+                    transaction?.let {
+                        addTransaction(it)
+                    }
+                }
+                matcherDeposit.find() -> {
+                    var regex = ""
+                    if (body.contains("Montantdetransaction")){
+                        regex = "Montantdetransaction:\\d+FCFA"
+                    }else if (body.contains("Vousavezrecuavecsucces")){
+                        body = body.replace("Vousavezrecuavecsucces", "Vousavezrecuavecsucces:")
+                        regex = "Vousavezrecuavecsucces:\\d+FCFA"
+                    }
+                    val transaction = msgToTransaction(regex, body, matcherDeposit.group(), TransactionState.DEPOSIT, date)
+                    transaction?.let {
+                        addTransaction(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getTotal(){
+        val transactionList = transactions.value
+        var totalAmount = 0
+        for (t in transactionList!!){
+            totalAmount += t.amount
+        }
+        total.value = totalAmount
+    }
+
+    private fun getBalance(){
+        val transactionList = transactions.value
+        var balanceAmount = 0
+        for (t in transactionList!!){
+            if (t.state == TransactionState.DEPOSIT.toString()){
+                balanceAmount += t.amount
+            }else {
+                balanceAmount -= t.amount
+            }
+        }
+        balance.value = balanceAmount
+    }
+
+    private fun getStateTotal(state: TransactionState, liveData: MutableLiveData<Int>){
+        val transactionList = transactions.value
+        var total = 0
+        for (t in transactionList!!) {
+            if (t.state == state.toString()) {
+                total += t.amount
+            }
+        }
+        liveData.value = total
+    }
+
+    fun sortTransactionsByState(state: TransactionState, sort: Boolean): List<Transaction>{
+        val list = arrayListOf<Transaction>()
+        if (sort){
+            for(t in transactions.value!!){
+                if (t.state == state.toString()){
+                    list.add(t)
+                }
+            }
+        }else{
+            list.addAll(transactions.value!!)
+        }
+        return list
+    }
 }

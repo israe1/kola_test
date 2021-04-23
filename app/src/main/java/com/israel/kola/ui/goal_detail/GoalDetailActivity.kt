@@ -3,12 +3,14 @@ package com.israel.kola.ui.goal_detail
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.israel.kola.R
 import com.israel.kola.databinding.ActivityGoalDetailBinding
 import com.israel.kola.models.Goal
 import com.israel.kola.ui.goal_detail.add_contribution.AddContributionDialog
+import kotlinx.android.synthetic.main.activity_goal_detail.*
 
 class GoalDetailActivity : AppCompatActivity() {
     lateinit var viewModel: GoalDetailViewModel
@@ -24,6 +26,10 @@ class GoalDetailActivity : AppCompatActivity() {
         val goal = intent.getParcelableExtra<Goal>("goal")
         binding.goal = goal
 
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         binding.contributionList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = contributionAdapter
@@ -36,14 +42,15 @@ class GoalDetailActivity : AppCompatActivity() {
         }
 
         binding.buttonContribute.setOnClickListener{
-            AddContributionDialog.newInstance().show(supportFragmentManager, "tag")
+            val dialog = AddContributionDialog(this)
+            dialog.show()
         }
 
         observeViewModel()
     }
 
     private fun observeViewModel() {
-        viewModel.contributions.observe(this, {contributions ->
+        viewModel.contributions.observe(this, Observer {contributions ->
             contributions?.let {
                 contributionAdapter.updateContributions(it)
             }
