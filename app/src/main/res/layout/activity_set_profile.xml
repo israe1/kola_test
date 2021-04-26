@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.set_profile.SetProfileActivity"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/large_space"
+        android:gravity="center_horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xl_space" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/set_profile_hint" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/large_space" />
+
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/groupImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circle_box" />
+
+            <ImageView
+                android:id="@+id/uploadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_baseline_photo_camera_24"
+                android:contentDescription="@string/upload_image" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xl_space" />
+
+        <EditText
+            android:id="@+id/editUserName"
+            android:layout_width="match_parent"
+            android:inputType="text"
+            style="@style/defaultEditTextStyle"
+            tools:ignore="Autofill"
+            android:hint="@string/user_name" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/save" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/xl_space" />
+    </LinearLayout>
+</layout>

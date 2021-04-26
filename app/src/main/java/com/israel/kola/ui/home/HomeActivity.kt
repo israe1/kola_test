@@ -6,26 +6,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Telephony
 import android.telephony.SmsMessage
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.israel.kola.R
-import com.israel.kola.data.local.Transaction
-import com.israel.kola.models.TransactionState
 import com.israel.kola.ui.all_transactions.TransactionsViewModel
 import com.israel.kola.ui.home.goal.GoalFragment
 import com.israel.kola.ui.home.money.MoneyFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
-import java.util.regex.Pattern
 
 private const val SMS_REQUEST_CODE = 111
 @AndroidEntryPoint
@@ -87,7 +81,7 @@ class HomeActivity : AppCompatActivity() {
         val br = object: BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 for (sms: SmsMessage in Telephony.Sms.Intents.getMessagesFromIntent(intent)){
-                    viewModel.fetchIncomingMessage(sms)
+                    viewModel.fetchTransactions(this@HomeActivity)
                 }
             }
         }

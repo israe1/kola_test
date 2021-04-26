@@ -1,88 +1,102 @@
 package com.israel.kola.ui.login
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
+import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthProvider
 import com.israel.kola.R
-import com.israel.kola.ui.home.HomeActivity
+import com.israel.kola.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_login.*
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-    @Inject lateinit var auth: FirebaseAuth
+    lateinit var binding: ActivityLoginBinding
+    private val viewModel: LoginViewModel by viewModels()
     private var verificationId: String = ""
-    lateinit var callback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private var state = LoginState.PHONE_NUMBER
+    private var phoneNumber = ""
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
-        initCallback()
+        binding.buttonLogin.setOnClickListener {
+            if (state == LoginState.PHONE_NUMBER){
+                getPhoneNumber()
+            } else {
+                verifyCode()
+            }
+        }
 
-        buttonLogin.setOnClickListener {
-            startPhoneVerification("+237693977849")
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+        binding.changePhoneNumber.setOnClickListener {
+            switchState(LoginState.PHONE_NUMBER)
         }
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        observeViewModel()
     }
 
-    private fun startPhoneVerification(phone: String) {
-        val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(phone)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(this)
-            .setCallbacks(callback)
-            .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
+    private fun observeViewModel() {
+        viewModel.error.observe(this, Observer {
+            it?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        })
+        viewModel.verificationId.observe(this, Observer {
+            it?.let {
+                verificationId = it
+                switchState(LoginState.CODE)
+            }
+        })
+        viewModel.credential.observe(this, Observer {
+            it?.let {
+                viewModel.signInWithPhoneAuthCredential(it, this)
+            }
+        })
+        viewModel.loading.observe(this, Observer {  })
     }
 
-    private fun initCallback() {
-        callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
-            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                Log.e("VERIFICATION_STATE", "Completed")
-                signInWithCredential(credential)
-            }
-
-            override fun onVerificationFailed(e: FirebaseException) {
-                Log.e("VERIFICATION_STATE", "Failed")
-                e.printStackTrace()
-            }
-
-            override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
-                Log.e("VERIFICATION_STATE", "CODE_SENT")
-                this@LoginActivity.verificationId = verificationId
-                verifyPhoneNumberCode(verificationId, "123456")
-            }
-
+    private fun switchState(state: LoginState) {
+        this.state = state
+        if (state == LoginState.CODE){
+            binding.buttonLogin.text = getString(R.string.validate)
+            binding.layoutPhoneNumber.visibility = View.GONE
+            binding.layoutCode.visibility = View.VISIBLE
+            binding.phoneNumber.text = phoneNumber
+        } else {
+            binding.buttonLogin.text = getString(R.string.log_in)
+            binding.layoutPhoneNumber.visibility = View.VISIBLE
+            binding.layoutCode.visibility = View.GONE
         }
     }
 
-    private fun verifyPhoneNumberCode(verificationId: String, code: String){
-        val credential = PhoneAuthProvider.getCredential(verificationId, code)
-        signInWithCredential(credential)
+    private fun getPhoneNumber(){
+        binding.editPhone.error = null
+        if (!TextUtils.isEmpty(binding.editPhone.text)){
+            phoneNumber = "+" + binding.countryCodePicker.textView_selectedCountry.text
+                .toString() + binding.editPhone.text.toString()
+            viewModel.startPhoneVerification(phoneNumber, this)
+        }else{
+            binding.editPhone.error = "Veuillez remplir ce champ"
+        }
     }
 
-    private fun signInWithCredential(credential: PhoneAuthCredential) {
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful){
-                    Log.e("SignIn", "Successful")
-                } else {
-                    Log.e("SignIn", "Failed")
-                    task.exception?.printStackTrace()
-                }
-            }
+    private fun verifyCode(){
+        binding.editCode.error = null
+        if (!TextUtils.isEmpty(binding.editCode.text)){
+            val code = binding.editCode.text.toString()
+            val credential = PhoneAuthProvider.getCredential(verificationId, code)
+            viewModel.credential.value = credential
+        } else {
+            binding.editCode.error = "Veuillez remplir ce champ"
+        }
     }
 }

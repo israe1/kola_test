@@ -1,79 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    tools:context=".ui.login.LoginActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        layout="@layout/layout_authentication_background"
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        tools:context=".ui.login.LoginActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        <include
+            layout="@layout/layout_authentication_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/titleText"
-        style="@style/whiteMainText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline4" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
 
-    <EditText
-        android:id="@+id/editLogin"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:inputType="phone"
-        tools:ignore="Autofill"
-        android:textColor="@color/white"
-        android:layout_marginHorizontal="@dimen/large_space"
-        app:layout_constraintBottom_toTopOf="@+id/termsCheckBox"
-        app:layout_constraintTop_toBottomOf="@id/titleText"
-        android:background="@drawable/edit_text_white_box_background"
-        android:hint="@string/login_hint"
-        android:textColorHint="@color/white"
-        android:paddingHorizontal="@dimen/medium_space"/>
+        <TextView
+            android:id="@+id/titleText"
+            style="@style/whiteMainText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline4" />
 
-    <CheckBox
-        android:id="@+id/termsCheckBox"
-        style="@style/lightText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/large_space"
-        android:layout_marginBottom="@dimen/large_space"
-        android:text="@string/terms_and_conditions"
-        app:layout_constraintBottom_toTopOf="@id/buttonLogin"
-        app:layout_constraintStart_toStartOf="parent" />
+        <LinearLayout
+            android:id="@+id/layoutCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginHorizontal="@dimen/xl_space"
+            app:layout_constraintBottom_toTopOf="@+id/termsCheckBox"
+            app:layout_constraintTop_toBottomOf="@id/titleText">
+            <TextView
+                android:id="@+id/phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="+237693977849"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/large_space"/>
+            <EditText
+                android:id="@+id/editCode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_height"
+                android:background="@drawable/edit_text_white_box_background"
+                android:hint="@string/enter_code"
+                android:inputType="phone"
+                tools:ignore="Autofill"
+                android:paddingHorizontal="@dimen/medium_space"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/medium_space"/>
+            <TextView
+                android:id="@+id/changePhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/change_phone_number"
+                android:gravity="start|center_vertical"
+                android:textColor="@color/white"
+                app:drawableTint="@color/white"
+                app:drawableStartCompat="@drawable/ic_baseline_keyboard_arrow_left_24" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonLogin"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginHorizontal="@dimen/large_space"
-        android:text="@string/log_in"
-        android:textColor="@color/colorPrimaryDark"
-        app:backgroundTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/guideline6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        </LinearLayout>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/layoutPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/termsCheckBox"
+            app:layout_constraintTop_toBottomOf="@id/titleText"
+            android:layout_marginHorizontal="@dimen/large_space"
+            android:gravity="center_vertical"
+            android:background="@drawable/edit_text_white_box_background"
+            android:orientation="horizontal">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/countryCodePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:ccp_contentColor="@color/white"
+                app:ccp_showFlag="false"
+                app:ccp_showArrow="false"
+                app:ccp_showNameCode="false"
+                app:ccp_defaultPhoneCode="237"
+                android:padding="0dp"
+                android:gravity="center"
+                app:ccp_hintExampleNumber="true" />
+
+            <EditText
+                android:id="@+id/editPhone"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:inputType="phone"
+                android:background="@android:color/transparent"
+                tools:ignore="Autofill"
+                android:textColor="@color/white"
+                android:layout_marginHorizontal="@dimen/large_space"
+                android:hint="@string/login_hint"
+                android:textColorHint="@color/white"
+                android:paddingHorizontal="@dimen/medium_space" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/termsCheckBox"
+            style="@style/lightText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/large_space"
+            android:layout_marginBottom="@dimen/large_space"
+            android:text="@string/terms_and_conditions"
+            app:layout_constraintBottom_toTopOf="@id/buttonLogin"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonLogin"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="@dimen/large_space"
+            android:text="@string/log_in"
+            android:textColor="@color/colorPrimaryDark"
+            app:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/guideline6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

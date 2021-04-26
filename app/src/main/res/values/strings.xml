@@ -43,4 +43,10 @@
     <string name="add_new_goal">Add new goal</string>
     <string name="remaining">Remaining</string>
     <string name="withdraw">Withdraw</string>
+    <string name="user_name">Nom et prénom</string>
+    <string name="save">Enregistrer</string>
+    <string name="set_profile_hint">Veuillez entrer votre nom et choisir une photo de profil</string>
+    <string name="enter_code">Entrez le code</string>
+    <string name="validate">Valider</string>
+    <string name="change_phone_number">Changer le numero de téléphone</string>
 </resources>

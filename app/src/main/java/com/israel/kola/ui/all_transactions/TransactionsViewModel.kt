@@ -1,11 +1,8 @@
 package com.israel.kola.ui.all_transactions
 
 import android.net.Uri
-import android.telephony.SmsMessage
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +10,6 @@ import com.israel.kola.data.local.Transaction
 import com.israel.kola.data.local.TransactionDataSource
 import com.israel.kola.models.TransactionState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
@@ -149,52 +145,6 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
 
     private fun addTransaction(transaction: Transaction){
         transactionDataSource.addTransaction(transaction)
-    }
-
-    fun fetchIncomingMessage(sms: SmsMessage){
-        val sender = sms.originatingAddress
-        var body = sms.messageBody
-        val date = sms.timestampMillis.toString()
-        if(sender.equals("OrangeMoney") && (body.contains("IDtransaction") || body.contains("Nodetransaction") || body.contains("Referencedetransaction"))){
-            val matcherCredit = Pattern.compile("RC\\d+.\\d+.\\w+").matcher(body)
-            val matcherTransfer = Pattern.compile("PP\\d+.\\d+.\\w+").matcher(body)
-            val matcherWithdraw = Pattern.compile("CO\\d+.\\d+.\\w+").matcher(body)
-            val matcherDeposit = Pattern.compile("CI\\d+.\\d+.\\w+").matcher(body)
-
-            when{
-                matcherCredit.find() -> {
-                    val transaction = msgToTransaction("Montantdelatransaction:\\d+FCFA", body, matcherCredit.group(), TransactionState.CREDIT, date)
-                    transaction?.let {
-                        addTransaction(it)
-                    }
-                }
-                matcherTransfer.find() -> {
-                    val transaction = msgToTransaction("MontantTransaction:\\d+FCFA", body, matcherTransfer.group(), TransactionState.TRANSFER, date)
-                    transaction?.let {
-                        addTransaction(it)
-                    }
-                }
-                matcherWithdraw.find() -> {
-                    val transaction = msgToTransaction("Montant:\\d+FCFA", body, matcherWithdraw.group(), TransactionState.WITHDRAW, date)
-                    transaction?.let {
-                        addTransaction(it)
-                    }
-                }
-                matcherDeposit.find() -> {
-                    var regex = ""
-                    if (body.contains("Montantdetransaction")){
-                        regex = "Montantdetransaction:\\d+FCFA"
-                    }else if (body.contains("Vousavezrecuavecsucces")){
-                        body = body.replace("Vousavezrecuavecsucces", "Vousavezrecuavecsucces:")
-                        regex = "Vousavezrecuavecsucces:\\d+FCFA"
-                    }
-                    val transaction = msgToTransaction(regex, body, matcherDeposit.group(), TransactionState.DEPOSIT, date)
-                    transaction?.let {
-                        addTransaction(it)
-                    }
-                }
-            }
-        }
     }
 
     private fun getTotal(){
