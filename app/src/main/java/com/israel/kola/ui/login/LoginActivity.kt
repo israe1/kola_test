@@ -2,6 +2,7 @@ package com.israel.kola.ui.login
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -81,8 +82,9 @@ class LoginActivity : AppCompatActivity() {
     private fun getPhoneNumber(){
         binding.editPhone.error = null
         if (!TextUtils.isEmpty(binding.editPhone.text)){
-            phoneNumber = "+" + binding.countryCodePicker.textView_selectedCountry.text
+            phoneNumber = binding.countryCodePicker.textView_selectedCountry.text
                 .toString() + binding.editPhone.text.toString()
+            Log.e("NUMBER", phoneNumber)
             viewModel.startPhoneVerification(phoneNumber, this)
         }else{
             binding.editPhone.error = "Veuillez remplir ce champ"

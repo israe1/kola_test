@@ -10,6 +10,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.israel.kola.ui.set_profile.SetProfileActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +41,7 @@ class LoginViewModel @Inject constructor(private var auth: FirebaseAuth) : ViewM
         loading.value = true
         val option = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phone)
+            .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(activity)
             .setCallbacks(callback)
             .build()
