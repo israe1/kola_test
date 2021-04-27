@@ -2,7 +2,6 @@ package com.israel.kola.ui.login
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -11,13 +10,18 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.israel.kola.R
 import com.israel.kola.databinding.ActivityLoginBinding
+import com.israel.kola.utils.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
+    @Inject lateinit var fireStore: FirebaseFirestore
     lateinit var binding: ActivityLoginBinding
+    private val loadingDialog = LoadingDialog()
     private val viewModel: LoginViewModel by viewModels()
     private var verificationId: String = ""
     private var state = LoginState.PHONE_NUMBER
@@ -62,7 +66,15 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.signInWithPhoneAuthCredential(it, this)
             }
         })
-        viewModel.loading.observe(this, Observer {  })
+        viewModel.loading.observe(this, Observer {
+            it?.let {
+                if (it){
+                    loadingDialog.show(supportFragmentManager, loadingDialog.tag)
+                }else{
+                    loadingDialog.dismiss()
+                }
+            }
+        })
     }
 
     private fun switchState(state: LoginState) {
@@ -84,10 +96,9 @@ class LoginActivity : AppCompatActivity() {
         if (!TextUtils.isEmpty(binding.editPhone.text)){
             phoneNumber = binding.countryCodePicker.textView_selectedCountry.text
                 .toString() + binding.editPhone.text.toString()
-            Log.e("NUMBER", phoneNumber)
             viewModel.startPhoneVerification(phoneNumber, this)
         }else{
-            binding.editPhone.error = "Veuillez remplir ce champ"
+            binding.editPhone.error = getString(R.string.field_mandatory)
         }
     }
 
@@ -98,7 +109,7 @@ class LoginActivity : AppCompatActivity() {
             val credential = PhoneAuthProvider.getCredential(verificationId, code)
             viewModel.credential.value = credential
         } else {
-            binding.editCode.error = "Veuillez remplir ce champ"
+            binding.editCode.error = getString(R.string.field_mandatory)
         }
     }
 }

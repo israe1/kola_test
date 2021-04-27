@@ -49,4 +49,6 @@
     <string name="enter_code">Entrez le code</string>
     <string name="validate">Valider</string>
     <string name="change_phone_number">Changer le numero de téléphone</string>
+    <string name="field_mandatory">Veuillez remplir ce champ</string>
+    <string name="loading">Loading...</string>
 </resources>
