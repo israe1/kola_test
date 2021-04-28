@@ -7,14 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.israel.kola.R
 import com.israel.kola.databinding.FragmentGoalBinding
 import com.israel.kola.ui.create_goal.CreateGoalActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GoalFragment: Fragment() {
-    lateinit var viewModel: GoalViewModel
+    private val viewModel: GoalViewModel by viewModels()
     lateinit var binding: FragmentGoalBinding
     private var goalAdapter: GoalAdapter = GoalAdapter(arrayListOf())
 
@@ -23,8 +26,7 @@ class GoalFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProviders.of(this).get(GoalViewModel::class.java)
-        viewModel.fetchGoals()
+        viewModel.fetchUserGoals(requireContext())
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_goal, container, false)
 
         binding.groupsList.apply {
@@ -37,7 +39,7 @@ class GoalFragment: Fragment() {
             startActivity(intent)
         }
 
-        binding.numberOfGroups.text = "6"
+
         binding.paidText.text = "1542000"
         binding.toPayText.text = "254325"
 
@@ -46,9 +48,15 @@ class GoalFragment: Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.goals.observe(this, {goals ->
+        viewModel.goals.observe(viewLifecycleOwner, Observer {goals ->
             goals?.let{
                 goalAdapter.updateGoals(it)
+            }
+        })
+
+        viewModel.numberOfGroups.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.numberOfGroups.text = it.toString()
             }
         })
     }

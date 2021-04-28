@@ -1,25 +1,69 @@
 package com.israel.kola.ui.home.goal
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.israel.kola.models.Goal
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.israel.kola.data.remote.Goal
+import com.israel.kola.utils.SingletonStore
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class GoalViewModel: ViewModel() {
+@HiltViewModel
+class GoalViewModel @Inject constructor(private var firestore: FirebaseFirestore, private var auth: FirebaseAuth): ViewModel() {
     val goals = MutableLiveData<List<Goal>>()
     val loading = MutableLiveData<Boolean>()
-    val GOAL_DESCRIPITON = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    val numberOfGroups = MutableLiveData<Int>()
 
-    fun fetchGoals(){
+    fun fetchUserGoals(context: Context){
         loading.value = true
-        val mockData = listOf(
-            Goal(1, 200000, 10, "Holy Days party", "July 4, 2021", GOAL_DESCRIPITON, ""),
-            Goal(2, 500000, 24, "Easter", "March 10, 2021", GOAL_DESCRIPITON, ""),
-            Goal(3, 1500000, 3, "Just for fun", "September 12, 2021", GOAL_DESCRIPITON, ""),
-            Goal(4, 800000, 8, "Gifts", "December 20, 2021", GOAL_DESCRIPITON, ""),
-            Goal(5, 50000, 10, "School fee", "July 4, 2021", GOAL_DESCRIPITON, ""),
-            Goal(6, 100000, 2, "Holy Days party", "August 11, 2021", GOAL_DESCRIPITON, ""),
-        )
-        loading.value = false
-        goals.value = mockData
+        val firebaseUser = auth.currentUser ?: return
+        val documentQuery = firestore.collection(SingletonStore.USER_GOAL_TABLE).whereEqualTo("userId", firebaseUser.uid)
+        documentQuery.addSnapshotListener{ values, e ->
+            loading.value = false
+            if (e != null){
+                Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
+                e.printStackTrace()
+                return@addSnapshotListener
+            }
+            numberOfGroups.value = values?.size()
+            for(doc in values!!){
+                doc?.let {
+                    goals.value = arrayListOf()
+                    doc.getString("goalId")?.let {
+                        fetchGoalsInfo(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchGoalsInfo(goalId: String){
+        loading.value = true
+        firestore.collection(SingletonStore.GOAL_TABLE).document(goalId)
+            .get().addOnSuccessListener { document ->
+                loading.value = false
+                document?.data?.let {
+                    val goal = Goal(
+                        it["id"].toString(),
+                        it["name"].toString(),
+                        it["amount"].toString(),
+                        it["date"].toString(),
+                        it["description"].toString(),
+                        it["imagePath"].toString(),
+                        it["numberOfMembers"].toString()
+                    )
+                    val goalList : ArrayList<Goal> = goals.value as ArrayList<Goal>
+                    goalList.add(goal)
+                    goals.value = goalList
+                    Log.e("Goal", goal.toString())
+                }
+            } . addOnFailureListener {
+                loading.value = false
+                it.printStackTrace()
+            }
     }
 }

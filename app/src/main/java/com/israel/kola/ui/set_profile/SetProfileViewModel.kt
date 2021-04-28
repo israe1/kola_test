@@ -57,7 +57,7 @@ class SetProfileViewModel @Inject constructor(
             name,
             image
         )
-        fireStore.collection("users").document(auth.currentUser!!.uid)
+        fireStore.collection(SingletonStore.USER_TABLE).document(auth.currentUser!!.uid)
             .set(user)
             .addOnSuccessListener {
                 loading.value = false
@@ -77,7 +77,7 @@ class SetProfileViewModel @Inject constructor(
 
     fun checkIfUserInfoIsSet(activity: SetProfileActivity){
         loading.value = true
-        fireStore.collection("users").document(auth.currentUser!!.uid)
+        fireStore.collection(SingletonStore.USER_TABLE).document(auth.currentUser!!.uid)
             .get().addOnCompleteListener { task ->
                 loading.value = false
                 if (task.isSuccessful) {

@@ -1,14 +1,15 @@
 package com.israel.kola.ui.goal_detail
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.israel.kola.R
+import com.israel.kola.data.remote.Goal
 import com.israel.kola.databinding.ActivityGoalDetailBinding
-import com.israel.kola.models.Goal
 import com.israel.kola.ui.goal_detail.add_contribution.AddContributionDialog
 import kotlinx.android.synthetic.main.activity_goal_detail.*
 
@@ -24,6 +25,7 @@ class GoalDetailActivity : AppCompatActivity() {
         viewModel.fetchContributions()
 
         val goal = intent.getParcelableExtra<Goal>("goal")
+        Log.e("Goal", goal.toString())
         binding.goal = goal
 
         toolbar.setNavigationOnClickListener {

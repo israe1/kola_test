@@ -30,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
         val firebaseUser = auth.currentUser
         if (firebaseUser != null) {
             var userIsSet = false
-            fireStore.collection("users").document(firebaseUser.uid)
+            fireStore.collection(SingletonStore.USER_TABLE).document(firebaseUser.uid)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val result = task.result

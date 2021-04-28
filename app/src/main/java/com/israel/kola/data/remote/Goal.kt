@@ -1,10 +1,15 @@
 package com.israel.kola.data.remote
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Goal(
-    val id: String?,
-    val name: String?,
-    val amount: String?,
+    var id: String?,
+    var name: String?,
+    var amount: String?,
     var date: String?,
     var description: String?,
-    var imagePath: String?
-)
+    var imagePath: String?,
+    var numberOfMembers: String?
+): Parcelable

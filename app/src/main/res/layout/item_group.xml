@@ -6,7 +6,7 @@
     <data>
         <variable
             name="goal"
-            type="com.israel.kola.models.Goal" />
+            type="com.israel.kola.data.remote.Goal" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -21,26 +21,19 @@
             android:layout_height="match_parent"
             android:padding="@dimen/medium_space">
 
-            <FrameLayout
-                android:id="@+id/groupImageFrame"
+            <ImageView
+                android:id="@+id/groupImage"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:src="@drawable/logo"
+                tools:tint="@color/grey_80"
+                android:scaleType="centerCrop"
                 android:background="@drawable/in_transaction_background"
                 android:backgroundTint="@color/overlay_dark_10"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <ImageView
-                    android:id="@+id/groupImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/logo"
-                    tools:tint="@color/grey_80"
-                    android:scaleType="centerCrop"
-                    android:padding="10dp"
-                    android:contentDescription="@string/group_image" />
-            </FrameLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="@string/group_image" />
 
             <TextView
                 android:id="@+id/groupName"
@@ -49,8 +42,8 @@
                 style="@style/titleText"
                 tools:text="Family group"
                 android:text="@{goal.name}"
-                app:layout_constraintStart_toEndOf="@id/groupImageFrame"
-                app:layout_constraintTop_toTopOf="@id/groupImageFrame"
+                app:layout_constraintStart_toEndOf="@id/groupImage"
+                app:layout_constraintTop_toTopOf="@id/groupImage"
                 android:layout_marginStart="@dimen/medium_space" />
 
             <TextView
