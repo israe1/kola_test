@@ -12,6 +12,7 @@ import com.israel.kola.models.TransactionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -20,7 +21,6 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
     val transactions = MutableLiveData<List<Transaction>>()
     val loading = MutableLiveData<Boolean>()
     val total = MutableLiveData<Int>()
-    val balance = MutableLiveData<Int>()
     val credit = MutableLiveData<Int>()
     val deposit = MutableLiveData<Int>()
     val transfer = MutableLiveData<Int>()
@@ -35,7 +35,6 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
                 it.collect {
                     transactions.value = it.sortedWith(compareByDescending{ t -> t.date})
                     getTotal()
-                    getBalance()
                     getStateTotal(TransactionState.DEPOSIT, deposit)
                     getStateTotal(TransactionState.WITHDRAW, withdraw)
                     getStateTotal(TransactionState.CREDIT, credit)
@@ -81,7 +80,11 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
                                 }
                             }
                             matcherTransfer.find() -> {
-                                val transaction = msgToTransaction("MontantTransaction:\\d+FCFA", body, matcherTransfer.group(), TransactionState.TRANSFER, date)
+                                var state = TransactionState.TRANSFER
+                                if (body.contains("Details:")){
+                                    state = TransactionState.DEPOSIT
+                                }
+                                val transaction = msgToTransaction("MontantTransaction:\\d+FCFA", body, matcherTransfer.group(), state, date)
                                 transaction?.let {
                                     allTransactions.add(it)
                                 }
@@ -131,16 +134,35 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
             if (body.contains("Vousavezrecuavecsucces")){
                 Log.e("AMOUNT", amount.toString())
             }
+
             return Transaction(
                 transactionId,
                 state.toString(),
                 date,
-                amount
+                amount,
+                getBalance(body.toLowerCase(Locale.ROOT))
             )
         }else{
             Log.e("STATE_ERROR", state.toString())
         }
         return null
+    }
+
+    private fun getBalance(body: String): String?{
+        var result: String? = null
+        var p = Pattern.compile("nouveausolde:\\d+ *(.+\\d)?fcfa?")
+        var m = p.matcher(body)
+        if (m.find()){
+            result = m.group().split(":")[1].replace("fcfa", "")
+        } else if(body.contains("votrenouveausoldeestde")){
+            val newBody = body.replace("votrenouveausoldeestde", "votrenouveausoldeestde:")
+            p = Pattern.compile("votrenouveausoldeestde:\\d+ *(.+\\d)?fcfa?")
+            m = p.matcher(newBody)
+            if (m.find()){
+                result = m.group().split(":")[1].replace("fcfa", "")
+            }
+        }
+        return result
     }
 
     private fun addTransaction(transaction: Transaction){
@@ -154,19 +176,6 @@ class TransactionsViewModel @Inject constructor(private var transactionDataSourc
             totalAmount += t.amount
         }
         total.value = totalAmount
-    }
-
-    private fun getBalance(){
-        val transactionList = transactions.value
-        var balanceAmount = 0
-        for (t in transactionList!!){
-            if (t.state == TransactionState.DEPOSIT.toString()){
-                balanceAmount += t.amount
-            }else {
-                balanceAmount -= t.amount
-            }
-        }
-        balance.value = balanceAmount
     }
 
     private fun getStateTotal(state: TransactionState, liveData: MutableLiveData<Int>){

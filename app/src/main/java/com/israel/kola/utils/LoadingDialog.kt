@@ -14,6 +14,7 @@ class LoadingDialog: AppCompatDialogFragment() {
         val builder = AlertDialog.Builder(requireContext())
         v = requireActivity().layoutInflater.inflate(R.layout.dialog_loading, null)
         builder.setView(v)
+        isCancelable = false
         return builder.create()
     }
 

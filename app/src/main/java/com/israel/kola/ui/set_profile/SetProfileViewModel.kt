@@ -44,7 +44,7 @@ class SetProfileViewModel @Inject constructor(
                         e.printStackTrace()
                     }
             } else {
-                TODO("Manage user reconnection")
+                setUserInfo(name, imageUri.toString(), activity)
             }
         } else {
             setUserInfo(name, null, activity)

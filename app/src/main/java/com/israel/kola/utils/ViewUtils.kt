@@ -9,7 +9,7 @@ import com.israel.kola.R
 
 fun getProgressDrawable(context: Context): CircularProgressDrawable {
     return CircularProgressDrawable(context).apply {
-        strokeWidth = 10f
+        strokeWidth = 3f
         centerRadius = 20f
         setTint(context.getColor(R.color.overlay_dark_30))
         start()
@@ -17,6 +17,7 @@ fun getProgressDrawable(context: Context): CircularProgressDrawable {
 }
 
 fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable){
+    clipToOutline = true
     val options = RequestOptions()
         .placeholder(progressDrawable)
         .error(R.drawable.logo)
@@ -25,3 +26,9 @@ fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable
         .load(uri)
         .into(this)
 }
+
+//fun reduceSizeForUpload(file: File): File?{
+//    try {
+//
+//    }
+//}

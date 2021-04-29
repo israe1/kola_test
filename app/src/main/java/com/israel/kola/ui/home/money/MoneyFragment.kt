@@ -2,28 +2,20 @@ package com.israel.kola.ui.home.money
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.israel.kola.R
-import com.israel.kola.data.local.Transaction
-import com.israel.kola.data.local.TransactionDataSource
 import com.israel.kola.databinding.FragmentMoneyBinding
-import com.israel.kola.models.TransactionState
 import com.israel.kola.ui.all_transactions.AllTransactionsActivity
 import com.israel.kola.ui.all_transactions.TransactionAdapter
 import com.israel.kola.ui.all_transactions.TransactionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MoneyFragment: Fragment() {
@@ -56,16 +48,15 @@ class MoneyFragment: Fragment() {
     private fun observeViewModel() {
         viewModel.transactions.observe(viewLifecycleOwner, Observer {transactions ->
             transactions?.let{
-                if (it.size > 4){
-                    transactionAdapter.updateTransactions(it.subList(0, 4))
-                }else{
-                    transactionAdapter.updateTransactions(it)
+                if (it.isNotEmpty()){
+                    binding.balanceAmount.text = it[0].newBalance
+                    if (it.size > 4){
+                        transactionAdapter.updateTransactions(it.subList(0, 4))
+                    }else{
+                        transactionAdapter.updateTransactions(it)
+                    }
                 }
             }
-        })
-
-        viewModel.balance.observe(viewLifecycleOwner, Observer {
-            binding.balanceAmount.text = it.toString()
         })
 
         viewModel.deposit.observe(viewLifecycleOwner, Observer {
