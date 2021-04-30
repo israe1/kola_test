@@ -14,22 +14,35 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import com.israel.kola.R
 import com.israel.kola.ui.all_transactions.TransactionsViewModel
 import com.israel.kola.ui.home.goal.GoalFragment
 import com.israel.kola.ui.home.money.MoneyFragment
+import com.israel.kola.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_home.*
+import javax.inject.Inject
 
 private const val SMS_REQUEST_CODE = 111
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     private val viewModel: TransactionsViewModel by viewModels()
+    @Inject lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        setupBottomNav()
 
+        buttonExit.setOnClickListener{
+            auth.signOut().also {
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+        }
+
+        setupBottomNav()
         checkSmsPermission()
     }
 
@@ -60,6 +73,8 @@ class HomeActivity : AppCompatActivity() {
                 add(GoalFragment())
             }
         }
+
+        viewPager.setPagingEnabled(false)
     }
 
     override fun onRequestPermissionsResult(

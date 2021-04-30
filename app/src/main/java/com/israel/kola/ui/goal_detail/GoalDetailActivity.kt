@@ -23,6 +23,7 @@ class GoalDetailActivity : AppCompatActivity(), ContributionInterface {
     private val viewModel: GoalDetailViewModel by viewModels()
     private lateinit var binding: ActivityGoalDetailBinding
     private val loadingDialog = LoadingDialog()
+    private val contributionAdapter = ContributionAdapter.newInstance(arrayListOf())
     var goal: Goal? = null
     private lateinit var dialog: AddContributionDialog
     private var goalContributions = arrayListOf<Contribution>()
@@ -49,6 +50,7 @@ class GoalDetailActivity : AppCompatActivity(), ContributionInterface {
 
         binding.contributionList.apply {
             layoutManager = LinearLayoutManager(context)
+            adapter = contributionAdapter
         }
 
 
@@ -68,9 +70,8 @@ class GoalDetailActivity : AppCompatActivity(), ContributionInterface {
             contributions?.let {
                 goalContributions.clear()
                 goalContributions.addAll(it)
-                val contributionAdapter = ContributionAdapter(it as ArrayList<Contribution>)
-                binding.contributionList.adapter = contributionAdapter
-                setAmount(it , binding.goalContributedAmount)
+                contributionAdapter.updateContributions(it)
+                setAmount(it as ArrayList<Contribution>, binding.goalContributedAmount)
                 getRemainingList()
             }
         })
@@ -107,7 +108,7 @@ class GoalDetailActivity : AppCompatActivity(), ContributionInterface {
             }
         }
         setAmount(remainingContributions, binding.goalRemainingAmount)
-        val remainingAdapter = ContributionAdapter(remainingContributions)
+        val remainingAdapter = ContributionAdapter.newInstance(remainingContributions)
         binding.remainingList.adapter = remainingAdapter
     }
 

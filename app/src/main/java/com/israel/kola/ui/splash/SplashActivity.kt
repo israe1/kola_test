@@ -50,10 +50,12 @@ class SplashActivity : AppCompatActivity() {
                     if (userIsSet) {
                         Handler().postDelayed({
                             startActivity(Intent(this, HomeActivity::class.java))
+                            finish()
                         }, 3000)
                     } else {
                         Handler().postDelayed({
                             startActivity(Intent(this, SetProfileActivity::class.java))
+                            finish()
                         }, 3000)
                     }
                 }
@@ -61,6 +63,7 @@ class SplashActivity : AppCompatActivity() {
         } else {
             Handler().postDelayed({
                 startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }, 3000)
         }
     }

@@ -29,4 +29,11 @@ class ContributionAdapter(private val contributions: ArrayList<Contribution>) : 
     }
 
     override fun getItemCount() = contributions.size
+
+    companion object{
+        @JvmStatic
+        fun newInstance(
+            list: ArrayList<Contribution>
+        ) = ContributionAdapter(list)
+    }
 }

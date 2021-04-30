@@ -55,6 +55,7 @@ class LoginViewModel @Inject constructor(private var auth: FirebaseAuth) : ViewM
                 if (task.isSuccessful){
                     val intent = Intent(activity, SetProfileActivity::class.java)
                     activity.startActivity(intent)
+                    activity.finish()
                     loading.value = false
                 } else {
                     error.value = "Echec d'authentification"
