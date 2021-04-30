@@ -6,8 +6,8 @@
     <data>
         <variable
             name="state"
-            type="com.israel.kola.models.TransactionState" />
-        <import type="com.israel.kola.models.TransactionState"/>
+            type="com.israel.kola.utils.TransactionState" />
+        <import type="com.israel.kola.utils.TransactionState"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

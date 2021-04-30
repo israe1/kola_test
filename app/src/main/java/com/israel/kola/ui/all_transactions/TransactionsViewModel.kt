@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.israel.kola.data.local.Transaction
 import com.israel.kola.data.local.TransactionDataSource
-import com.israel.kola.models.TransactionState
+import com.israel.kola.utils.TransactionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

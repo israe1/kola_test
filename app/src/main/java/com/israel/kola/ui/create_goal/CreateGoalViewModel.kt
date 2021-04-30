@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.israel.kola.data.remote.Contribution
 import com.israel.kola.data.remote.Goal
 import com.israel.kola.data.remote.UserGoal
+import com.israel.kola.ui.goal_detail.add_contribution.AddContributionDialog
 import com.israel.kola.utils.SingletonStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -110,4 +112,6 @@ class CreateGoalViewModel @Inject constructor(
     private fun getExt(uri: Uri, activity: CreateGoalActivity): String?{
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri))
     }
+
+
 }

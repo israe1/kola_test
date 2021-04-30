@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.israel.kola.data.remote.Goal
 import com.israel.kola.databinding.ItemGroupBinding
 import com.israel.kola.ui.goal_detail.GoalDetailActivity
-import com.israel.kola.utils.getProgressDrawable
 import com.israel.kola.utils.loadImage
 
 class GoalAdapter(var goals: ArrayList<Goal>): RecyclerView.Adapter<GoalAdapter.GoalViewHolder>() {
@@ -35,11 +34,10 @@ class GoalAdapter(var goals: ArrayList<Goal>): RecyclerView.Adapter<GoalAdapter.
     )
 
     override fun onBindViewHolder(holder: GoalViewHolder, position: Int) {
-        val progressDrawable = getProgressDrawable(holder.itemView.context)
         val goal = goals[position]
         holder.binding.goal = goal
         if (goal.imagePath != null){
-            holder.binding.groupImage.loadImage(goal.imagePath, progressDrawable)
+            holder.binding.groupImage.loadImage(goal.imagePath)
         }
     }
 

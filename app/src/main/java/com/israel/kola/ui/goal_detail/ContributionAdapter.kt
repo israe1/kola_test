@@ -3,11 +3,11 @@ package com.israel.kola.ui.goal_detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.israel.kola.data.remote.Contribution
 import com.israel.kola.databinding.ItemContributionBinding
-import com.israel.kola.models.Contribution
-import com.israel.kola.models.Member
+import com.israel.kola.utils.loadCircularImage
 
-class ContributionAdapter(var contributions: ArrayList<Contribution>): RecyclerView.Adapter<ContributionAdapter.ContributionViewHolder>() {
+class ContributionAdapter(private val contributions: ArrayList<Contribution>) : RecyclerView.Adapter<ContributionAdapter.ContributionViewHolder>() {
 
     class ContributionViewHolder(val binding: ItemContributionBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -22,8 +22,10 @@ class ContributionAdapter(var contributions: ArrayList<Contribution>): RecyclerV
     )
 
     override fun onBindViewHolder(holder: ContributionViewHolder, position: Int) {
-        holder.binding.contribution = contributions[position]
-        holder.binding.member = Member("Israel MEKOMOU")
+        val contribution = contributions[position]
+        holder.binding.contribution = contribution
+        holder.binding.member = contribution.user
+        holder.binding.contributorImage.loadCircularImage(contribution.user?.imagePath)
     }
 
     override fun getItemCount() = contributions.size

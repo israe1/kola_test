@@ -4,21 +4,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.israel.kola.R
-import com.israel.kola.data.local.TransactionDataSource
 import com.israel.kola.databinding.ActivityAllTransactionsBinding
-import com.israel.kola.models.TransactionState
+import com.israel.kola.utils.TransactionState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_all_transactions.*
-import kotlinx.android.synthetic.main.fragment_money.*
 import kotlinx.android.synthetic.main.fragment_money.transactionsList
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AllTransactionsActivity : AppCompatActivity(), View.OnClickListener {
