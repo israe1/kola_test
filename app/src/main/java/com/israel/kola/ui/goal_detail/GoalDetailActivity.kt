@@ -101,8 +101,20 @@ class GoalDetailActivity : AppCompatActivity(), ContributionInterface {
             for (c in goalContributions){
                 if (c.user?.id == member.id){
                     if (c.amount?.toInt()!! < amountPerUser!!){
-                        c.amount = (amountPerUser!! - c.amount?.toInt()!!).toString()
-                        remainingContributions.add(c)
+                        var i = 0
+                        var alreadyPresent = false
+                        for(r in remainingContributions){
+                            if (r.user?.id == c.user?.id){
+                                alreadyPresent = true
+                                r.amount = (r.amount?.toInt()!! - c.amount?.toInt()!!).toString()
+                                continue
+                            }
+                            i++
+                        }
+                        if (!alreadyPresent){
+                            c.amount = (amountPerUser!! - c.amount?.toInt()!!).toString()
+                            remainingContributions.add(c)
+                        }
                     }
                 }
             }
